@@ -48,6 +48,9 @@ public class BoardManager : MonoBehaviour {
         //    GameObject carInstance = Instantiate(cars[0], new Vector3(7F, x, 0F), Quaternion.identity) as GameObject;
         //    GameManager.instance.carInstances.Add(carInstance);
         //}
+        (Instantiate(exit, new Vector3(rows, columns, 0F), Quaternion.identity) as GameObject).transform.SetParent(boardHolder);
+        (Instantiate(spawn_point, new Vector3(-1, 3F, 0F), Quaternion.identity) as GameObject).transform.SetParent(boardHolder);
+        (Instantiate(spawn_point, new Vector3(columns, 4F, 0F), Quaternion.Euler(0F, 0F, 180F)) as GameObject).transform.SetParent(boardHolder);
         
     }
 
@@ -55,9 +58,6 @@ public class BoardManager : MonoBehaviour {
     {
         BoardSetup();
         InitializeList();
-        (Instantiate(exit, new Vector3(rows, columns, 0F), Quaternion.identity) as GameObject).transform.SetParent(boardHolder);
-        (Instantiate(spawn_point, new Vector3(-1, 3F, 0F), Quaternion.identity) as GameObject).transform.SetParent(boardHolder);
-        (Instantiate(spawn_point, new Vector3(columns, 4F, 0F), Quaternion.Euler(0F, 0F, 180F)) as GameObject).transform.SetParent(boardHolder);
     }
 
 }

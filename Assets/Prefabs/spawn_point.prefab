@@ -55,8 +55,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cars:
-  - {fileID: 101700, guid: 671f90d7b29aad644be2cea5847ad90f, type: 2}
-  - {fileID: 101700, guid: 671f90d7b29aad644be2cea5847ad90f, type: 2}
+  - {fileID: 110438, guid: 9fa36e89b7dd0cc45831beccbab4dd38, type: 2}
+  - {fileID: 154148, guid: 671f90d7b29aad644be2cea5847ad90f, type: 2}
 --- !u!212 &21227392
 SpriteRenderer:
   m_ObjectHideFlags: 1
