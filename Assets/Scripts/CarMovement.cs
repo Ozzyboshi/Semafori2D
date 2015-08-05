@@ -37,7 +37,7 @@ public class CarMovement : MonoBehaviour {
             //float distance = Mathf.Abs(hit.point.x - transform.position.x);
             if (hit.distance < 2.5F && braking==false) {
                 //Debug.Log("1Distanza" + hit.distance + "hitpointposition" + hit.point.x);
-                LeanTween.moveX(gameObject, transform.position.x - 1F, 0.1F).setEase(LeanTweenType.linear).setDelay(0f);
+                LeanTween.moveX(gameObject, hit.point.x, 10F).setEase(LeanTweenType.linear).setDelay(0f);
                 braking = true;
             }
             else if (hit.distance < 0.5F) {
@@ -58,6 +58,7 @@ public class CarMovement : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (braking == true) return;
         int rotation = (int) other.gameObject.transform.rotation.eulerAngles.z;
         
         if (rotation==0) 
