@@ -75,15 +75,15 @@ public class BoardManager : MonoBehaviour {
         crossroadGameObjects = GameObject.FindGameObjectsWithTag("crossroad");
         foreach (GameObject roadObject in roadGameObjects)
         {
-            Debug.Log(roadObject.gameObject.transform.rotation.eulerAngles.z);
             Vector3 checkVector = roadObject.gameObject.transform.position;
             if (roadObject.gameObject.transform.rotation.eulerAngles.z > -0.1 && roadObject.gameObject.transform.rotation.eulerAngles.z < 0.1)
                 checkVector.x++;
+            if (roadObject.gameObject.transform.rotation.eulerAngles.z > 179.9 && roadObject.gameObject.transform.rotation.eulerAngles.z < 181.1)
+                checkVector.x--;
             foreach (GameObject crossroadObject in crossroadGameObjects)
             {
                 if (crossroadObject.transform.position==checkVector)
                 {
-                    Debug.Log("trovato");
                     (Instantiate(stop_point, roadObject.gameObject.transform.position, roadObject.gameObject.transform.rotation) as GameObject).transform.SetParent(boardHolder);
                 }
             }
