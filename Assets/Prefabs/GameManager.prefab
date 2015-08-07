@@ -60,6 +60,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   spawn_point: {fileID: 159598, guid: 251af4982e7bdca41b884575f965b03c, type: 2}
+  stop_point: {fileID: 196672, guid: 5427e836fd407ab47a750b76787e12b6, type: 2}
   exit: {fileID: 192022, guid: dbf903ea1ea48f049b917ea43cce05e4, type: 2}
   grass: {fileID: 181166, guid: 4406d2220b1396944a2e6ecd967d0f64, type: 2}
 --- !u!1001 &100100000

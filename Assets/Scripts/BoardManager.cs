@@ -11,6 +11,7 @@ public class BoardManager : MonoBehaviour {
     public GameObject crossroad;
     public GameObject[] cars;
     public GameObject spawn_point;
+    public GameObject stop_point;
     public GameObject exit;
     public GameObject grass;
 
@@ -46,7 +47,7 @@ public class BoardManager : MonoBehaviour {
                     toInstantiate = road;
                     GameObject instance2 = Instantiate(toInstantiate, new Vector3(x, y, 0F), Quaternion.identity) as GameObject;
                     if (x==8) instance2.transform.rotation *= Quaternion.Euler(0F, 0F, 90F);
-                    else instance2.transform.rotation *= Quaternion.Euler(0F, 0F, -90F);
+                    else instance2.transform.rotation *= Quaternion.Euler(0F, 0F, 270F);
                     instance2.transform.SetParent(boardHolder);
                     continue;
                 }
@@ -66,9 +67,34 @@ public class BoardManager : MonoBehaviour {
         
     }
 
+    void InitializeStops()
+    {
+        GameObject[] roadGameObjects;
+        GameObject[] crossroadGameObjects;
+        roadGameObjects = GameObject.FindGameObjectsWithTag("simpleroad");
+        crossroadGameObjects = GameObject.FindGameObjectsWithTag("crossroad");
+        foreach (GameObject roadObject in roadGameObjects)
+        {
+            Debug.Log(roadObject.gameObject.transform.rotation.eulerAngles.z);
+            Vector3 checkVector = roadObject.gameObject.transform.position;
+            if (roadObject.gameObject.transform.rotation.eulerAngles.z > -0.1 && roadObject.gameObject.transform.rotation.eulerAngles.z < 0.1)
+                checkVector.x++;
+            foreach (GameObject crossroadObject in crossroadGameObjects)
+            {
+                if (crossroadObject.transform.position==checkVector)
+                {
+                    Debug.Log("trovato");
+                    (Instantiate(stop_point, roadObject.gameObject.transform.position, roadObject.gameObject.transform.rotation) as GameObject).transform.SetParent(boardHolder);
+                }
+            }
+
+        }
+    }
+
     public void SetupScene(int level) 
     {
         BoardSetup();
+        InitializeStops();
         InitializeList();
     }
 

@@ -67,6 +67,7 @@
      <Compile Include="Assets\Scripts\BoardManager.cs" />
      <Compile Include="Assets\Scripts\CarMovement.cs" />
      <Compile Include="Assets\Scripts\CarSpawner.cs" />
+     <Compile Include="Assets\Scripts\CrossRoadGizmos.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\Loader.cs" />
      <None Include="Assets\LeanTween\Examples\Shader\2dUnlitWithFade.shader" />

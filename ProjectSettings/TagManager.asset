@@ -6,6 +6,9 @@ TagManager:
   tags:
   - exit
   - car
+  - crossroad
+  - simpleroad
+  - stop
   layers:
   - Default
   - TransparentFX

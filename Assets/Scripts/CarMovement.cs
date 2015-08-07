@@ -27,10 +27,10 @@ public class CarMovement : MonoBehaviour {
         //Ray ray = new Ray(transform.position, Vector2.right);
         //RaycastHit2D hit = Physics2D.Raycast(transform.position,Vector2.right, 1 << LayerMask.NameToLayer("cars"));
         Debug.DrawLine(startLineCast, endLineCast, Color.white);
-        RaycastHit2D hit = Physics2D.Linecast(startLineCast, endLineCast, 1 << LayerMask.NameToLayer("cars"));
+        RaycastHit2D hit = Physics2D.Linecast(startLineCast, endLineCast, (1 << LayerMask.NameToLayer("cars")) | (1 << LayerMask.NameToLayer("stop")));
         if (hit.collider != null)
         {
-            //Debug.Log("La macchina con posizione " + transform.position + "ha urtato" + hit.collider.gameObject.transform.position + "posizione start:" + startLineCast + "posizione end:" + endLineCast + "bounds" + GetComponent<BoxCollider2D>().bounds.extents.x+"direction:"+direction);
+            Debug.Log("La macchina con posizione " + transform.position + "ha urtato" + hit.collider.gameObject.transform.position + "posizione start:" + startLineCast + "posizione end:" + endLineCast + "bounds" + GetComponent<BoxCollider2D>().bounds.extents.x+"direction:"+direction);
             float floatHeight;
             float liftForce;
             float damping;

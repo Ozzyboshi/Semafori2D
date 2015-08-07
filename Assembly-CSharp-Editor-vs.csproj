@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Editor\CrossRoadGizmosEditor.cs" />
      <Compile Include="Assets\LeanTween\Editor\LeanTweenDocumentationEditor.cs" />
      <None Include="Assets\LeanTween\Examples\Shader\2dUnlitWithFade.shader" />
      <None Include="Assets\LeanTween\ReadMe.txt" />
