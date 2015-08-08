@@ -55,3 +55,6 @@ TagManager:
   - name: cars
     uniqueID: 3734018977
     locked: 0
+  - name: trafficlight
+    uniqueID: 1700275959
+    locked: 0

@@ -9,6 +9,7 @@ public class BoardManager : MonoBehaviour {
     
     public GameObject road;
     public GameObject crossroad;
+	public GameObject trafficlight;
     public GameObject[] cars;
     public GameObject spawn_point;
     public GameObject stop_point;
@@ -17,7 +18,7 @@ public class BoardManager : MonoBehaviour {
 
     private Transform boardHolder;
     private Transform spawners;
-    private List<Vector3> gridPosition = new List<Vector3>();
+    //private List<Vector3> gridPosition = new List<Vector3>();
 
     void InitializeList()
     {
@@ -76,18 +77,35 @@ public class BoardManager : MonoBehaviour {
         foreach (GameObject roadObject in roadGameObjects)
         {
             Vector3 checkVector = roadObject.gameObject.transform.position;
+			Vector3 trafficlightVector = roadObject.gameObject.transform.position;
             if (roadObject.gameObject.transform.rotation.eulerAngles.z > -0.1 && roadObject.gameObject.transform.rotation.eulerAngles.z < 0.1)
+			{
                 checkVector.x++;
-            if (roadObject.gameObject.transform.rotation.eulerAngles.z > 179.9 && roadObject.gameObject.transform.rotation.eulerAngles.z < 181.1)
-                checkVector.x--;
+				trafficlightVector.y--;
+			}
+            else if (roadObject.gameObject.transform.rotation.eulerAngles.z > 179.9 && roadObject.gameObject.transform.rotation.eulerAngles.z < 181.1)
+			{
+				checkVector.x--;
+				trafficlightVector.y++;
+			}
+			else if (roadObject.gameObject.transform.rotation.eulerAngles.z > 89.9 && roadObject.gameObject.transform.rotation.eulerAngles.z < 90.1)
+			{
+				checkVector.y++;
+				trafficlightVector.x++;
+			}
+			else if (roadObject.gameObject.transform.rotation.eulerAngles.z > 269.9 && roadObject.gameObject.transform.rotation.eulerAngles.z < 271.1)
+			{
+				checkVector.y--;
+				trafficlightVector.x--;
+			}
             foreach (GameObject crossroadObject in crossroadGameObjects)
             {
                 if (crossroadObject.transform.position==checkVector)
                 {
-                    (Instantiate(stop_point, roadObject.gameObject.transform.position, roadObject.gameObject.transform.rotation) as GameObject).transform.SetParent(boardHolder);
-                }
+                    (Instantiate(stop_point, roadObject.gameObject.transform.position, roadObject.gameObject.transform.rotation) as GameObject).transform.SetParent(crossroadObject.transform);
+					(Instantiate(trafficlight,trafficlightVector, roadObject.gameObject.transform.rotation) as GameObject).transform.SetParent(crossroadObject.transform);
+				}
             }
-
         }
     }
 

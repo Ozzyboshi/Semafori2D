@@ -56,6 +56,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   road: {fileID: 146470, guid: 74fb91757802ea24e9a6b838fa66b4d1, type: 2}
   crossroad: {fileID: 118874, guid: 22b838517b4486e4da30c1a8927e1b79, type: 2}
+  trafficlight: {fileID: 172220, guid: 7beddee1b0235344186a089b621db940, type: 2}
   cars:
   - {fileID: 0}
   - {fileID: 0}
