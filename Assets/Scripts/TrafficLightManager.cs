@@ -43,9 +43,16 @@ public class TrafficLightManager : MonoBehaviour {
 	void changeTrafficlightObjectState(GameObject gm) 
 	{ 
 		if (gm.GetComponent<SpriteRenderer>().sprite == greenSprite)
+		{
 			gm.GetComponent<SpriteRenderer>().sprite = redSprite;
+			transform.parent.GetChild(0).GetComponent<BoxCollider2D>().enabled=false;
+		}
 		else
+		{
 			gm.GetComponent<SpriteRenderer>().sprite = greenSprite;
+			transform.parent.GetChild(0).GetComponent<BoxCollider2D>().enabled=false;
+			Debug.Log (transform.parent.GetChild(0).tag);
+		}
 	}
 	void OnMouseDown() 
 	{

@@ -5,7 +5,9 @@ public class CarMovement : MonoBehaviour {
     private Vector3 direction;
     private float straightSpeed=3.5F;
     private bool braking = false;
+	private bool still = false;
     public bool straightMovement;
+	private LTDescr tween;
 
     public void StartStraightMovement()
     {
@@ -17,7 +19,7 @@ public class CarMovement : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void FixedUpdate () 
+	void Update () 
     {
         if (direction == Vector3.zero) return;
         Vector2 startLineCast = transform.position + direction * (GetComponent<BoxCollider2D>().bounds.extents.x+0.1F);
@@ -34,26 +36,41 @@ public class CarMovement : MonoBehaviour {
             float floatHeight;
             float liftForce;
             float damping;
-            //float distance = Mathf.Abs(hit.point.x - transform.position.x);
+            float distance = Mathf.Abs(hit.point.x - transform.position.x);
+			//Debug.Log(hit.distance+":"+distance);
             if (hit.distance < 1.5F && braking==false) {
                 //Debug.Log("1Distanza" + hit.distance + "hitpointposition" + hit.point.x);
-                LeanTween.moveX(gameObject, hit.point.x, 10F).setEase(LeanTweenType.linear).setDelay(0f);
-                braking = true;
+				//LeanTween.moveX(gameObject, hit.point.x, 10F).setEase(LeanTweenType.linear).setDelay(0f);
+				//tween.setTime(10.5f);
+                //braking = true;
             }
-            else if (hit.distance < 0.2F) {
+            if (distance < 0.5F) {
+				still=true;
+				LeanTween.pause(gameObject);
                 //Debug.Log("2Distanza" + hit.distance+"hitpointposition"+hit.point.x);
-                LeanTween.cancel(gameObject);
+                //LeanTween.cancel(gameObject);
                 //Time.timeScale = 0.0F;
             }
+			else
+			{
+				if (still==true)
+					LeanTween.resume(gameObject);
+			}
+
             //Time.timeScale = 0.0F;
            
             //float heightError = floatHeight - distance;
             //float force = liftForce * heightError - rigidbody2D.velocity.y * damping;
         }
-        if (straightMovement == true)
+		else
+		{
+			if (still==true)
+				LeanTween.resume(gameObject);
+		}
+        /*if (straightMovement == true)
         {
             transform.Translate(straightSpeed*Time.deltaTime, 0, 0);
-        }
+        }*/
 	}
 
     void OnTriggerEnter2D(Collider2D other)
@@ -63,22 +80,22 @@ public class CarMovement : MonoBehaviour {
         
         if (rotation==0) 
         {
-            LeanTween.moveX(gameObject, transform.position.x + 1F, straightSpeed / 10).setEase(LeanTweenType.linear).setDelay(0f);
+			tween=LeanTween.moveX(gameObject, transform.position.x + 1F, straightSpeed / 10).setEase(LeanTweenType.linear).setDelay(0f);
             direction = Vector3.right;
         }
         else  if (rotation == 180)
         {
-            LeanTween.moveX(gameObject, transform.position.x - 1F, straightSpeed / 10).setEase(LeanTweenType.linear).setDelay(0f);
+			tween=LeanTween.moveX(gameObject, transform.position.x - 1F, straightSpeed / 10).setEase(LeanTweenType.linear).setDelay(0f);
             direction = Vector3.left;
         }
         else if ( rotation==270)
         {
-            LeanTween.moveY(gameObject, transform.position.y + 1F, straightSpeed / 10).setEase(LeanTweenType.linear).setDelay(0f);
+			tween=LeanTween.moveY(gameObject, transform.position.y + 1F, straightSpeed / 10).setEase(LeanTweenType.linear).setDelay(0f);
             direction = Vector3.up;
         }
         else if (rotation == 90)
         {
-            LeanTween.moveX(gameObject, transform.position.y - 1F, straightSpeed / 10).setEase(LeanTweenType.linear).setDelay(0f);
+			tween=LeanTween.moveX(gameObject, transform.position.y - 1F, straightSpeed / 10).setEase(LeanTweenType.linear).setDelay(0f);
             direction = Vector3.down;
         }
         transform.rotation = other.gameObject.transform.rotation;
