@@ -35,12 +35,12 @@ public class CarMovement : MonoBehaviour {
             float liftForce;
             float damping;
             //float distance = Mathf.Abs(hit.point.x - transform.position.x);
-            if (hit.distance < 2.5F && braking==false) {
+            if (hit.distance < 1.5F && braking==false) {
                 //Debug.Log("1Distanza" + hit.distance + "hitpointposition" + hit.point.x);
                 LeanTween.moveX(gameObject, hit.point.x, 10F).setEase(LeanTweenType.linear).setDelay(0f);
                 braking = true;
             }
-            else if (hit.distance < 0.5F) {
+            else if (hit.distance < 0.2F) {
                 //Debug.Log("2Distanza" + hit.distance+"hitpointposition"+hit.point.x);
                 LeanTween.cancel(gameObject);
                 //Time.timeScale = 0.0F;

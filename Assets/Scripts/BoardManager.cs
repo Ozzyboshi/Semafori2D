@@ -17,32 +17,26 @@ public class BoardManager : MonoBehaviour {
     public GameObject grass;
 
     private Transform boardHolder;
+	private Transform crossroadList;
+	private Transform singleCrossroad;
     private Transform spawners;
-    //private List<Vector3> gridPosition = new List<Vector3>();
-
-    void InitializeList()
-    {
-        /*gridPosition.Clear();
-
-        for (int x = 0; x < rows; x++)
-        {
-            for (int y = 0; y < columns; y++)
-            {
-                gridPosition.Add(new Vector3(x, y, 0f));
-            }
-        }*/
-    }
 
     void BoardSetup()
     {
         boardHolder = new GameObject("Board").transform;
+		crossroadList = new GameObject("CrossroadList").transform;
+		singleCrossroad = new GameObject("SingleCrossroad").transform;
+		singleCrossroad.transform.SetParent (crossroadList);
         spawners = new GameObject("Spawners").transform;
+
         for (int x = 0; x < rows; x++)
         {
             for (int y = 0; y < columns; y++)
             {
                 GameObject toInstantiate = grass;
-                if ((x == 7 || x == 8) && (y == 3 || y == 4)) toInstantiate = crossroad;
+                
+				if (x==7&&y==4) { instantiateCrossroad(x,y); continue;}
+				if ((x == 7 || x == 8) && (y == 3 || y == 4)) continue;
                 else if (y == 3 || y == 4) toInstantiate = road;
                 else if (x == 7 || x == 8) {
                     toInstantiate = road;
@@ -68,23 +62,45 @@ public class BoardManager : MonoBehaviour {
         
     }
 
+	//This function builds a crossroad with 4 tiles and wraps them up into a crossroadpair gameobject
+	void instantiateCrossroad(int x,int y) 
+	{
+		Transform crossroadPair = new GameObject("CrossroadPair").transform;
+		crossroadPair.SetParent (singleCrossroad);
+		GameObject instance = Instantiate(crossroad, new Vector3(x,y,0F),Quaternion.identity) as GameObject;
+		instance.transform.SetParent(crossroadPair);
+		instance = Instantiate(crossroad, new Vector3(x+1,y-1,0F),Quaternion.identity) as GameObject;
+		instance.transform.SetParent(crossroadPair);
+
+		crossroadPair = new GameObject("CrossroadPair").transform;
+		crossroadPair.SetParent (singleCrossroad);
+		instance = Instantiate(crossroad, new Vector3(x,y-1,0F),Quaternion.identity) as GameObject;
+		instance.transform.SetParent(crossroadPair);
+		instance = Instantiate(crossroad, new Vector3(x+1,y,0F),Quaternion.identity) as GameObject;
+		instance.transform.SetParent(crossroadPair);
+	}
+
     void InitializeStops()
     {
+		bool changeTrafficLightState;
         GameObject[] roadGameObjects;
         GameObject[] crossroadGameObjects;
         roadGameObjects = GameObject.FindGameObjectsWithTag("simpleroad");
         crossroadGameObjects = GameObject.FindGameObjectsWithTag("crossroad");
         foreach (GameObject roadObject in roadGameObjects)
         {
+			changeTrafficLightState=false;
             Vector3 checkVector = roadObject.gameObject.transform.position;
 			Vector3 trafficlightVector = roadObject.gameObject.transform.position;
             if (roadObject.gameObject.transform.rotation.eulerAngles.z > -0.1 && roadObject.gameObject.transform.rotation.eulerAngles.z < 0.1)
 			{
+				changeTrafficLightState=true;
                 checkVector.x++;
 				trafficlightVector.y--;
 			}
             else if (roadObject.gameObject.transform.rotation.eulerAngles.z > 179.9 && roadObject.gameObject.transform.rotation.eulerAngles.z < 181.1)
 			{
+				changeTrafficLightState=true;
 				checkVector.x--;
 				trafficlightVector.y++;
 			}
@@ -103,7 +119,10 @@ public class BoardManager : MonoBehaviour {
                 if (crossroadObject.transform.position==checkVector)
                 {
                     (Instantiate(stop_point, roadObject.gameObject.transform.position, roadObject.gameObject.transform.rotation) as GameObject).transform.SetParent(crossroadObject.transform);
-					(Instantiate(trafficlight,trafficlightVector, roadObject.gameObject.transform.rotation) as GameObject).transform.SetParent(crossroadObject.transform);
+					GameObject newTrafficLight=Instantiate(trafficlight,trafficlightVector, roadObject.gameObject.transform.rotation) as GameObject;
+					newTrafficLight.transform.SetParent(crossroadObject.transform);
+					if (changeTrafficLightState)
+						newTrafficLight.GetComponent<TrafficLightManager>().changeTrafficlightState();
 				}
             }
         }
@@ -113,7 +132,6 @@ public class BoardManager : MonoBehaviour {
     {
         BoardSetup();
         InitializeStops();
-        InitializeList();
     }
 
 }

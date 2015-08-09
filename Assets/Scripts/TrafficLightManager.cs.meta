@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 881afe9e4c343c34cad0fd51b2254885
+timeCreated: 1439109022
+licenseType: Pro
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - greenSprite: {fileID: 21300000, guid: 2fffaf64d64d0e245a11c240202019bb, type: 3}
+  - redSprite: {fileID: 21300000, guid: 2899788405a8f33488ac322008b5a33d, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

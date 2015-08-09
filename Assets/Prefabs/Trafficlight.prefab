@@ -9,9 +9,11 @@ GameObject:
   m_Component:
   - 4: {fileID: 406554}
   - 212: {fileID: 21278740}
+  - 114: {fileID: 11494884}
+  - 61: {fileID: 6130888}
   m_Layer: 0
   m_Name: Trafficlight
-  m_TagString: Untagged
+  m_TagString: trafficlight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,6 +30,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!61 &6130888
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 172220}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2}
+--- !u!114 &11494884
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 172220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 881afe9e4c343c34cad0fd51b2254885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  greenSprite: {fileID: 21300000, guid: 2fffaf64d64d0e245a11c240202019bb, type: 3}
+  redSprite: {fileID: 21300000, guid: 2899788405a8f33488ac322008b5a33d, type: 3}
 --- !u!212 &21278740
 SpriteRenderer:
   m_ObjectHideFlags: 1
