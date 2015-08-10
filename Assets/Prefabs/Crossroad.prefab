@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 492726}
   - 212: {fileID: 21217918}
   - 61: {fileID: 6172704}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: Crossroad
   m_TagString: crossroad
   m_Icon: {fileID: 0}
