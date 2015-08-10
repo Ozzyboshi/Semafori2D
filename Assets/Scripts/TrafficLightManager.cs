@@ -51,7 +51,7 @@ public class TrafficLightManager : MonoBehaviour {
 		{
 			gm.GetComponent<SpriteRenderer>().sprite = greenSprite;
 			transform.parent.GetChild(0).GetComponent<BoxCollider2D>().enabled=false;
-			Debug.Log (transform.parent.GetChild(0).tag);
+			//Debug.Log (transform.parent.GetChild(0).tag);
 		}
 	}
 	void OnMouseDown() 

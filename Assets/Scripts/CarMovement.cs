@@ -6,6 +6,7 @@ public class CarMovement : MonoBehaviour {
     private float straightSpeed=3.5F;
     private bool braking = false;
 	private bool still = false;
+	private bool steering = false;
     public bool straightMovement;
 	private LTDescr tween;
 
@@ -21,18 +22,21 @@ public class CarMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
-        if (direction == Vector3.zero) return;
+        if (direction == Vector3.zero||steering==true) return;
         Vector2 startLineCast = transform.position + direction * (GetComponent<BoxCollider2D>().bounds.extents.x+0.1F);
         Vector2 endLineCast = transform.position+(direction*3.5F);
         //Vector2 startLineCast = new Vector2(transform.position.x);
         //Vector2 endLineCast = new Vector2(transform.position.x);
         //Ray ray = new Ray(transform.position, Vector2.right);
         //RaycastHit2D hit = Physics2D.Raycast(transform.position,Vector2.right, 1 << LayerMask.NameToLayer("cars"));
+
+		Vector3 fwd = transform.TransformDirection(Vector3.forward)*1000;
+		//Debug.DrawRay (transform.position, fwd,Color.white);
         Debug.DrawLine(startLineCast, endLineCast, Color.white);
         RaycastHit2D hit = Physics2D.Linecast(startLineCast, endLineCast, (1 << LayerMask.NameToLayer("cars")) | (1 << LayerMask.NameToLayer("stop")));
         if (hit.collider != null)
         {
-            //Debug.Log("La macchina con posizione " + transform.position + "ha urtato" + hit.collider.gameObject.transform.position + "posizione start:" + startLineCast + "posizione end:" + endLineCast + "bounds" + GetComponent<BoxCollider2D>().bounds.extents.x+"direction:"+direction);
+            Debug.Log("La macchina con posizione " + transform.position + "ha urtato" + hit.collider.gameObject.transform.position + "posizione start:" + startLineCast + "posizione end:" + endLineCast + "bounds" + GetComponent<BoxCollider2D>().bounds.extents.x+"direction:"+direction);
             float floatHeight;
             float liftForce;
             float damping;
@@ -75,9 +79,23 @@ public class CarMovement : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (braking == true) return;
+        if (braking == true||steering==true) return;
+
         int rotation = (int) other.gameObject.transform.rotation.eulerAngles.z;
+
+		if (other.tag=="crossroad")
+		{
+			Debug.Log("steering");
+			steering=true;
+			Vector3 currentPosition = transform.position;
+			Vector3 middlePosition1 = new Vector3(transform.position.x+1,transform.position.y,transform.position.z);
+			Vector3 middlePosition2 = new Vector3(transform.position.x+1,transform.position.y,transform.position.z);
+			Vector3 endPosition = new Vector3(transform.position.x+1,transform.position.y-1,transform.position.z);
+			LeanTween.move(gameObject, new Vector3 [] { currentPosition, middlePosition1,middlePosition2,endPosition}, 10.0F).setEase(LeanTweenType.linear).setOrientToPath2d(true);
+			return ;
+		}
         
+		Debug.Log("straight");
         if (rotation==0) 
         {
 			tween=LeanTween.moveX(gameObject, transform.position.x + 1F, straightSpeed / 10).setEase(LeanTweenType.linear).setDelay(0f);
