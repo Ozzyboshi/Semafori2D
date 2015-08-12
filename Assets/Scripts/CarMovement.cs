@@ -24,7 +24,7 @@ public class CarMovement : MonoBehaviour {
     {
         if (direction == Vector3.zero||steering==true) return;
         Vector2 startLineCast = transform.position + direction * (GetComponent<BoxCollider2D>().bounds.extents.x+0.5F);
-        Vector2 endLineCast = transform.position+(direction*3.5F);
+        //Vector2 endLineCast = transform.position+(direction*3.5F);
         //Vector2 startLineCast = new Vector2(transform.position.x);
         //Vector2 endLineCast = new Vector2(transform.position.x);
         //Ray ray = new Ray(transform.position, Vector2.right);
@@ -33,14 +33,18 @@ public class CarMovement : MonoBehaviour {
 		Debug.DrawRay (startLineCast, direction*4,Color.white);
         //Debug.DrawLine(startLineCast, endLineCast, Color.white);
         //RaycastHit2D hit = Physics2D.Linecast(startLineCast, endLineCast, (1 << LayerMask.NameToLayer("cars")) | (1 << LayerMask.NameToLayer("stop")));
-		RaycastHit2D hit = Physics2D.Raycast(startLineCast, direction,4, (1 << LayerMask.NameToLayer("cars")) | (1 << LayerMask.NameToLayer("crossroad")));
+
+		// This raycast should prevent the car to collide with other cars and stoppoints
+		RaycastHit2D hit = Physics2D.Raycast(startLineCast, direction,4, (1 << LayerMask.NameToLayer("cars")) | (1 << LayerMask.NameToLayer("stop")));
         if (hit.collider != null)
         {
-            //Debug.Log("La macchina con posizione " + transform.position + "ha urtato" + hit.collider.gameObject.transform.position + "posizione start:" + startLineCast + "posizione end:" + endLineCast + "bounds" + GetComponent<BoxCollider2D>().bounds.extents.x+"direction:"+direction+"tag"+hit.transform.tag);
-            float floatHeight;
-            float liftForce;
-            //float damping;
-            float distance = Mathf.Abs(hit.point.x - transform.position.x);
+            //Debug.Log("La macchina con posizione " + transform.position + "ha urtato" + hit.collider.gameObject.transform.position + "posizione start:" + startLineCast + "bounds" + GetComponent<BoxCollider2D>().bounds.extents.x+"direction:"+direction+"tag"+hit.transform.tag);
+			float distance = 0;
+			if (direction == Vector3.right || direction==Vector3.left)
+            	distance = Mathf.Abs(hit.point.x - transform.position.x);
+			else
+				distance = Mathf.Abs(hit.point.y - transform.position.y);
+			//distance = hit.distance;
 			//Debug.Log(hit.distance+":"+distance);
             if (hit.distance < 1.5F && braking==false) {
                 //Debug.Log("1Distanza" + hit.distance + "hitpointposition" + hit.point.x);
@@ -48,7 +52,7 @@ public class CarMovement : MonoBehaviour {
 				//tween.setTime(10.5f);
                 //braking = true;
             }
-            if (distance < 0.5F) {
+            if (distance < 0.7F) {
 				still=true;
 				LeanTween.pause(gameObject);
                 //Debug.Log("2Distanza" + hit.distance+"hitpointposition"+hit.point.x);

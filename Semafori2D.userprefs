@@ -1,12 +1,12 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\BoardManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\TrafficLightManager.cs">
     <Files>
-      <File FileName="Assets\Scripts\CarMovement.cs" Line="99" Column="1" />
-      <File FileName="Assets\Scripts\TrafficLightManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\BoardManager.cs" Line="60" Column="9" />
-      <File FileName="Assets\Scripts\GameManager.cs" Line="52" Column="204" />
-      <File FileName="Assets\Scripts\CarSpawner.cs" Line="12" Column="41" />
+      <File FileName="Assets\Scripts\TrafficLightManager.cs" Line="49" Column="1" />
+      <File FileName="Assets\Scripts\BoardManager.cs" Line="62" Column="9" />
+      <File FileName="Assets\Scripts\CarMovement.cs" Line="48" Column="6" />
+      <File FileName="Assets\Scripts\GameManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\CarSpawner.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\CrossRoadGizmos.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>

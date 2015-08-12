@@ -16,23 +16,6 @@ public class TrafficLightManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-		/*bool moving = false;
-		GameObject go;
-		if(Input.touchCount == 1)
-		{    
-			// touch on screen
-			if(Input.GetTouch(0).phase == TouchPhase.Began)
-			{
-				Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-				RaycastHit hit = new RaycastHit();
-				moving = Physics.Raycast (ray, out hit);
-				if(moving)
-				{
-					go = hit.transform.gameObject;
-					Debug.Log("Touch Detected on : "+go.name);
-				}
-			}
-		}*/
 
 	}
 
@@ -45,7 +28,7 @@ public class TrafficLightManager : MonoBehaviour {
 		if (gm.GetComponent<SpriteRenderer>().sprite == greenSprite)
 		{
 			gm.GetComponent<SpriteRenderer>().sprite = redSprite;
-			transform.parent.GetChild(0).GetComponent<BoxCollider2D>().enabled=false;
+			transform.parent.GetChild(0).GetComponent<BoxCollider2D>().enabled=true;
 		}
 		else
 		{
