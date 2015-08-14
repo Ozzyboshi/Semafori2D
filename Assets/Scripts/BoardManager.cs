@@ -51,11 +51,7 @@ public class BoardManager : MonoBehaviour {
                 instance.transform.SetParent(boardHolder);
             }
         }
-        //for (int x = 0; x < rows; x++)
-        //{
-        //    GameObject carInstance = Instantiate(cars[0], new Vector3(7F, x, 0F), Quaternion.identity) as GameObject;
-        //    GameManager.instance.carInstances.Add(carInstance);
-        //}
+       
         (Instantiate(exit, new Vector3(rows, columns, 0F), Quaternion.identity) as GameObject).transform.SetParent(boardHolder);
         
 		(Instantiate(spawn_point, new Vector3(-1, 3F, 0F), Quaternion.identity) as GameObject).transform.SetParent(spawners);
@@ -121,7 +117,8 @@ public class BoardManager : MonoBehaviour {
             {
                 if (crossroadObject.transform.position==checkVector)
                 {
-                    (Instantiate(stop_point, roadObject.gameObject.transform.position, roadObject.gameObject.transform.rotation) as GameObject).transform.SetParent(crossroadObject.transform);
+                    //(Instantiate(stop_point, roadObject.gameObject.transform.position, roadObject.gameObject.transform.rotation) as GameObject).transform.SetParent(crossroadObject.transform);
+					(Instantiate(stop_point, checkVector, roadObject.gameObject.transform.rotation) as GameObject).transform.SetParent(crossroadObject.transform);
 					GameObject newTrafficLight=Instantiate(trafficlight,trafficlightVector, roadObject.gameObject.transform.rotation) as GameObject;
 					newTrafficLight.transform.SetParent(crossroadObject.transform);
 					if (changeTrafficLightState)

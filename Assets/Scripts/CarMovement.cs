@@ -22,8 +22,13 @@ public class CarMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
     {
+		Vector2 startLineCast;
+
         if (direction == Vector3.zero||steering==true) return;
-        Vector2 startLineCast = transform.position + direction * (GetComponent<BoxCollider2D>().bounds.extents.x+0.5F);
+		if (direction == Vector3.left || direction == Vector3.right)
+        	startLineCast = transform.position + direction * (GetComponent<BoxCollider2D>().bounds.extents.x);
+		else
+			startLineCast = transform.position + direction * (GetComponent<BoxCollider2D>().bounds.extents.y);
         //Vector2 endLineCast = transform.position+(direction*3.5F);
         //Vector2 startLineCast = new Vector2(transform.position.x);
         //Vector2 endLineCast = new Vector2(transform.position.x);
@@ -52,7 +57,7 @@ public class CarMovement : MonoBehaviour {
 				//tween.setTime(10.5f);
                 //braking = true;
             }
-            if (hit.distance < 0.7F) {
+            if (hit.distance < 0.2F) {
 				still=true;
 				LeanTween.pause(gameObject);
                 //Debug.Log("2Distanza" + hit.distance+"hitpointposition"+hit.point.x);
@@ -112,10 +117,12 @@ public class CarMovement : MonoBehaviour {
 		steering = false;
 	}
 
-	// Called every time car changes straight tile
+	// Called every time car changes road tile
     void OnTriggerEnter2D(Collider2D other)
     {
 		if (braking == true||steering==true) return;
+
+		// If the car hits a crossroad it drifts
 		if (other.tag=="crossroad")
 		{
 			steering=true;
@@ -134,6 +141,18 @@ public class CarMovement : MonoBehaviour {
 				middlePosition1 = new Vector3(other.transform.position.x,transform.position.y,transform.position.z);
 				middlePosition2 = new Vector3(other.transform.position.x,transform.position.y,transform.position.z);
 				endPosition = new Vector3(other.transform.position.x,transform.position.y+1,transform.position.z);
+			}
+			else if (direction==Vector3.up)
+			{
+				middlePosition1 = new Vector3(other.transform.position.x,other.transform.position.y,transform.position.z);
+				middlePosition2 = new Vector3(other.transform.position.x,other.transform.position.y,transform.position.z);
+				endPosition = new Vector3(other.transform.position.x+1f,other.transform.position.y,transform.position.z);
+			}
+			else if (direction==Vector3.down)
+			{
+				middlePosition1 = new Vector3(other.transform.position.x,other.transform.position.y,transform.position.z);
+				middlePosition2 = new Vector3(other.transform.position.x,other.transform.position.y,transform.position.z);
+				endPosition = new Vector3(other.transform.position.x-1f,other.transform.position.y,transform.position.z);
 			}
 			LeanTween.move(gameObject, new Vector3 [] { currentPosition, middlePosition1,middlePosition2,endPosition}, 10.0F).setEase(LeanTweenType.linear).setOrientToPath2d(true).setOnComplete(EndSteering);
 			return ;
