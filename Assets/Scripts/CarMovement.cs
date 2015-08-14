@@ -52,7 +52,7 @@ public class CarMovement : MonoBehaviour {
 				//tween.setTime(10.5f);
                 //braking = true;
             }
-            if (distance < 0.7F) {
+            if (hit.distance < 0.7F) {
 				still=true;
 				LeanTween.pause(gameObject);
                 //Debug.Log("2Distanza" + hit.distance+"hitpointposition"+hit.point.x);

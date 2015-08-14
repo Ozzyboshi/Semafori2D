@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 488966}
   - 212: {fileID: 21264042}
   - 61: {fileID: 6106122}
+  - 114: {fileID: 11457284}
   m_Layer: 8
   m_Name: RoadStraight
   m_TagString: simpleroad
@@ -42,6 +43,17 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
+--- !u!114 &11457284
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 146470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cd2a5b3de49411448a16f66521bc357, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &21264042
 SpriteRenderer:
   m_ObjectHideFlags: 1

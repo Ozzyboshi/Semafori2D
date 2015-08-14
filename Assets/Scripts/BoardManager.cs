@@ -61,7 +61,7 @@ public class BoardManager : MonoBehaviour {
 		(Instantiate(spawn_point, new Vector3(-1, 3F, 0F), Quaternion.identity) as GameObject).transform.SetParent(spawners);
         (Instantiate(spawn_point, new Vector3(columns, 4F, 0F), Quaternion.Euler(0F, 0F, 180F)) as GameObject).transform.SetParent(spawners);
 
-		//(Instantiate(spawn_point, new Vector3(7, columns, 0F), Quaternion.Euler(0F, 0F, 270F)) as GameObject).transform.SetParent(spawners);
+		(Instantiate(spawn_point, new Vector3(7, columns, 0F), Quaternion.Euler(0F, 0F, 270F)) as GameObject).transform.SetParent(spawners);
 		(Instantiate(spawn_point, new Vector3(8, -1, 0F), Quaternion.Euler(0F, 0F, 90F)) as GameObject).transform.SetParent(spawners);
 	}
 

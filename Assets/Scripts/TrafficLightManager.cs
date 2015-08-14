@@ -28,12 +28,14 @@ public class TrafficLightManager : MonoBehaviour {
 		if (gm.GetComponent<SpriteRenderer>().sprite == greenSprite)
 		{
 			gm.GetComponent<SpriteRenderer>().sprite = redSprite;
-			transform.parent.GetChild(0).GetComponent<BoxCollider2D>().enabled=true;
+			gm.transform.parent.GetChild(0).GetComponent<BoxCollider2D>().enabled=true;
+			//Debug.Log ("Abilitato collider stop a "+transform.parent.GetChild(0).transform.position);
 		}
 		else
 		{
 			gm.GetComponent<SpriteRenderer>().sprite = greenSprite;
-			transform.parent.GetChild(0).GetComponent<BoxCollider2D>().enabled=false;
+			gm.transform.parent.GetChild(0).GetComponent<BoxCollider2D>().enabled=false;
+			//Debug.Log ("Disabilitato collider stop a "+transform.parent.GetChild(0).transform.position);
 			//Debug.Log (transform.parent.GetChild(0).tag);
 		}
 	}
@@ -74,22 +76,12 @@ public class TrafficLightManager : MonoBehaviour {
 										}
 									}
 
-									//changeTrafficlightState(otherTrafficLight.gameObject);
 								}
 
 
 							}
 						}
-						/*Transform otherTrafficlightPair = transform.parent.parent.GetChild(index + 1);
-						if (otherTrafficlightPair==null)
-							otherTrafficlightPair = transform.parent.GetChild(index - 1);
 
-						for (int j=0;j<otherTrafficlightPair.childCount;j++)
-						{
-							Transform otherTrafficLight=crossroadPair.GetChild(i);
-							Debug.Log (otherTrafficLight.tag);
-							//changeTrafficlightState(otherTrafficLight.gameObject);
-						}*/
 
 					}
 				}
