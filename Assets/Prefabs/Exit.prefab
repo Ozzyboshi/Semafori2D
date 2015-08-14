@@ -10,9 +10,11 @@ GameObject:
   - 4: {fileID: 461486}
   - 212: {fileID: 21263762}
   - 61: {fileID: 6104338}
+  - 114: {fileID: 11421838}
+  - 114: {fileID: 11474528}
   m_Layer: 8
   m_Name: Exit
-  m_TagString: exit
+  m_TagString: simpleroad
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -41,7 +43,29 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Size: {x: .239999995, y: .119999997}
+  m_Size: {x: 1, y: 1}
+--- !u!114 &11421838
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 192022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cd2a5b3de49411448a16f66521bc357, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11474528
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 192022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e775037b616ade74d94de25cf48c5e8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &21263762
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -66,7 +90,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -305038661
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: b41d05fa98a95704b8a0ac9eb2244d98, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 743b1307165edee439f34526497d55dc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &100100000
 Prefab:

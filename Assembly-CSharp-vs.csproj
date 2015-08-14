@@ -65,6 +65,7 @@
      <Compile Include="Assets\LeanTween\Examples\Scripts\TutorialPresentationFinished.cs" />
      <Compile Include="Assets\LeanTween\Examples\Scripts\UIExampleCS.cs" />
      <Compile Include="Assets\Scripts\BoardManager.cs" />
+     <Compile Include="Assets\Scripts\CarDestroyer.cs" />
      <Compile Include="Assets\Scripts\CarMovement.cs" />
      <Compile Include="Assets\Scripts\CarSpawner.cs" />
      <Compile Include="Assets\Scripts\CrossRoadGizmos.cs" />

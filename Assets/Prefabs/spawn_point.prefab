@@ -11,6 +11,7 @@ GameObject:
   - 212: {fileID: 21227392}
   - 61: {fileID: 6147790}
   - 114: {fileID: 11491746}
+  - 114: {fileID: 11466062}
   m_Layer: 8
   m_Name: spawn_point
   m_TagString: Player
@@ -43,6 +44,17 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: .5, y: .5}
+--- !u!114 &11466062
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 159598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cd2a5b3de49411448a16f66521bc357, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11491746
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -57,6 +69,7 @@ MonoBehaviour:
   cars:
   - {fileID: 110438, guid: 9fa36e89b7dd0cc45831beccbab4dd38, type: 2}
   - {fileID: 154148, guid: 671f90d7b29aad644be2cea5847ad90f, type: 2}
+  active: 1
 --- !u!212 &21227392
 SpriteRenderer:
   m_ObjectHideFlags: 1
