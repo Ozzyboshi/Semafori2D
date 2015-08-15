@@ -59,7 +59,8 @@ public class CarMovement : MonoBehaviour {
             }
             if (hit.distance < 0.2F) {
 				still=true;
-				LeanTween.pause(gameObject);
+				LeanTween.cancel(gameObject);
+				//LeanTween.pause(gameObject);
                 //Debug.Log("2Distanza" + hit.distance+"hitpointposition"+hit.point.x);
                 //LeanTween.cancel(gameObject);
                 //Time.timeScale = 0.0F;
@@ -67,7 +68,7 @@ public class CarMovement : MonoBehaviour {
 			else
 			{
 				if (still==true)
-					LeanTween.resume(gameObject);
+					moveStraight ((int)transform.rotation.eulerAngles.z);
 			}
 
             //Time.timeScale = 0.0F;
@@ -78,7 +79,7 @@ public class CarMovement : MonoBehaviour {
 		else
 		{
 			if (still==true)
-				LeanTween.resume(gameObject);
+				moveStraight ((int)transform.rotation.eulerAngles.z);
 		}
         /*if (straightMovement == true)
         {
@@ -88,26 +89,20 @@ public class CarMovement : MonoBehaviour {
 
 	void moveStraight(int rotation)
 	{
-		if (rotation==0) 
-		{
-			tween=LeanTween.moveX(gameObject, transform.position.x + 1F, straightSpeed / 10).setEase(LeanTweenType.linear).setDelay(0f);
+		if (rotation == 0) {
+			tween = LeanTween.moveX (gameObject, transform.position.x + 1F, straightSpeed / 10).setEase (LeanTweenType.linear).setDelay (0f);
 			direction = Vector3.right;
-		}
-		else  if (rotation == 180)
-		{
-			tween=LeanTween.moveX(gameObject, transform.position.x - 1F, straightSpeed / 10).setEase(LeanTweenType.linear).setDelay(0f);
+		} else  if (rotation == 180) {
+			tween = LeanTween.moveX (gameObject, transform.position.x - 1F, straightSpeed / 10).setEase (LeanTweenType.linear).setDelay (0f);
 			direction = Vector3.left;
-		}
-		else if ( rotation==270)
-		{
-			tween=LeanTween.moveY(gameObject, transform.position.y -1, straightSpeed / 10).setEase(LeanTweenType.linear).setDelay(0f);
+		} else if (rotation == 270) {
+			tween = LeanTween.moveY (gameObject, transform.position.y - 1, straightSpeed / 10).setEase (LeanTweenType.linear).setDelay (0f);
 			direction = Vector3.down;
-		}
-		else if (rotation == 90)
-		{
-			tween=LeanTween.moveY(gameObject, transform.position.y + 1F, straightSpeed / 10).setEase(LeanTweenType.linear).setDelay(0f);
+		} else if (rotation == 90) {
+			tween = LeanTween.moveY (gameObject, transform.position.y + 1F, straightSpeed / 10).setEase (LeanTweenType.linear).setDelay (0f);
 			direction = Vector3.up;
-		}
+		} else
+			Debug.Log ("rotazione anomala : " + rotation);
 	}
 
 	// Called every time a steer has ended (on crossroad)
@@ -125,6 +120,22 @@ public class CarMovement : MonoBehaviour {
 		// If the car hits a crossroad it drifts
 		if (other.tag=="crossroad")
 		{
+			// Check if the other side of the road is available - to be finished
+			Vector2 endLineCast=new Vector2(0,0);
+			if (direction == Vector3.right)
+				endLineCast=new Vector3(other.transform.position.x,transform.position.y-1);
+			else if (direction == Vector3.left)
+				endLineCast=new Vector3(other.transform.position.x,transform.position.y+1);
+			else if (direction == Vector3.up)
+				endLineCast=new Vector3(other.transform.position.x+1,transform.position.y);
+			else if (direction == Vector3.down)
+				endLineCast=new Vector3(other.transform.position.x-1,transform.position.y);
+			RaycastHit2D hit = Physics2D.Linecast(other.transform.position,endLineCast, (1 << LayerMask.NameToLayer("cars")));
+			Debug.DrawLine(other.transform.position,endLineCast,Color.white);
+			if (hit.collider!=null)
+				Debug.Log("sto hittando"+hit.collider.gameObject.transform.tag);
+			// End check
+
 			steering=true;
 			Vector3 currentPosition = transform.position;
 			Vector3 middlePosition1;
