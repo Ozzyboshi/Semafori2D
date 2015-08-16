@@ -4,6 +4,14 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 
+	private int _score = 0 ;
+	public int score
+	{
+		get { return _score; }
+		set {_score = value; }
+	}
+
+
     public BoardManager boardScript;
     public int level = 1;
 
@@ -32,4 +40,9 @@ public class GameManager : MonoBehaviour {
         boardScript.SetupScene(level);
 
     }
+
+	void OnGUI ()
+	{
+		GUI.Label (new Rect (50,50,100,50), "Score :"+_score);
+	}
 }

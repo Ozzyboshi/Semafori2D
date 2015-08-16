@@ -16,7 +16,11 @@ public class CarDestroyer : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other)
 	{
 		if (other.tag == "car")
+		{
 			Destroy (other.gameObject);
+			GameManager.instance.score++;
+		}
+			
 	}
 
 }

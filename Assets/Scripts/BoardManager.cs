@@ -128,6 +128,11 @@ public class BoardManager : MonoBehaviour {
         }
     }
 
+	void OnGUI ()
+	{
+		GUI.Label (new Rect (50,50,100,50), "Score :");
+	}
+
     public void SetupScene(int level) 
     {
         BoardSetup();
