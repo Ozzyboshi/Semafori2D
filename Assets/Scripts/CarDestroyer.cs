@@ -17,7 +17,6 @@ public class CarDestroyer : MonoBehaviour {
 	{
 		if (other.tag == "car")
 			Destroy (other.gameObject);
-		Debug.Log ("Punto");
 	}
 
 }

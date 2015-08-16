@@ -404,7 +404,7 @@ MonoBehaviour:
   cars:
   - {fileID: 110438, guid: 9fa36e89b7dd0cc45831beccbab4dd38, type: 2}
   - {fileID: 154148, guid: 671f90d7b29aad644be2cea5847ad90f, type: 2}
-  active: 1
+  active: 0
 --- !u!61 &314028875
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -5,8 +5,9 @@ public class CarMovement : MonoBehaviour {
     private Vector3 direction;
     private float straightSpeed=3.5F;
     private bool braking = false;
-	private bool still = false;
+	private bool isStill = false;
 	private bool steering = false;
+	private bool isAccellerating = false;
     public bool straightMovement;
 	private LTDescr tween;
 
@@ -29,11 +30,6 @@ public class CarMovement : MonoBehaviour {
         	startLineCast = transform.position + direction * (GetComponent<BoxCollider2D>().bounds.extents.x);
 		else
 			startLineCast = transform.position + direction * (GetComponent<BoxCollider2D>().bounds.extents.y);
-        //Vector2 endLineCast = transform.position+(direction*3.5F);
-        //Vector2 startLineCast = new Vector2(transform.position.x);
-        //Vector2 endLineCast = new Vector2(transform.position.x);
-        //Ray ray = new Ray(transform.position, Vector2.right);
-        //RaycastHit2D hit = Physics2D.Raycast(transform.position,Vector2.right, 1 << LayerMask.NameToLayer("cars"));
 
 		Debug.DrawRay (startLineCast, direction*4,Color.white);
         //Debug.DrawLine(startLineCast, endLineCast, Color.white);
@@ -58,8 +54,8 @@ public class CarMovement : MonoBehaviour {
                 //braking = true;
             }
             if (hit.distance < 0.2F) {
-				still=true;
-				LeanTween.cancel(gameObject);
+				StopMovement();
+
 				//LeanTween.pause(gameObject);
                 //Debug.Log("2Distanza" + hit.distance+"hitpointposition"+hit.point.x);
                 //LeanTween.cancel(gameObject);
@@ -67,8 +63,8 @@ public class CarMovement : MonoBehaviour {
             }
 			else
 			{
-				if (still==true)
-					moveStraight ((int)transform.rotation.eulerAngles.z);
+				if (isStill==true)
+					AccellerateStraight();
 			}
 
             //Time.timeScale = 0.0F;
@@ -78,8 +74,8 @@ public class CarMovement : MonoBehaviour {
         }
 		else
 		{
-			if (still==true)
-				moveStraight ((int)transform.rotation.eulerAngles.z);
+			if (isStill==true)
+				AccellerateStraight();
 		}
         /*if (straightMovement == true)
         {
@@ -87,28 +83,87 @@ public class CarMovement : MonoBehaviour {
         }*/
 	}
 
-	void moveStraight(int rotation)
+	/*void moveStraight(int rotation)
 	{
+		if (isAccellerating == true)
+			return;
+		LeanTween.cancel (gameObject);
 		if (rotation == 0) {
 			tween = LeanTween.moveX (gameObject, transform.position.x + 1F, straightSpeed / 10).setEase (LeanTweenType.linear).setDelay (0f);
 			direction = Vector3.right;
+			isStill=false;
 		} else  if (rotation == 180) {
 			tween = LeanTween.moveX (gameObject, transform.position.x - 1F, straightSpeed / 10).setEase (LeanTweenType.linear).setDelay (0f);
 			direction = Vector3.left;
+			isStill=false;
 		} else if (rotation == 270) {
 			tween = LeanTween.moveY (gameObject, transform.position.y - 1, straightSpeed / 10).setEase (LeanTweenType.linear).setDelay (0f);
 			direction = Vector3.down;
+			isStill=false;
 		} else if (rotation == 90) {
 			tween = LeanTween.moveY (gameObject, transform.position.y + 1F, straightSpeed / 10).setEase (LeanTweenType.linear).setDelay (0f);
 			direction = Vector3.up;
+			isStill=false;
 		} else
 			Debug.Log ("rotazione anomala : " + rotation);
+	}*/
+
+	// Called to stop car movement
+	void StopMovement()
+	{
+		isStill=true;
+		LeanTween.cancel(gameObject);
+	}
+
+	// Called for moving between tiles
+	void continueMoving(int rotation)
+	{
+		moveStraight2 (rotation, 0, straightSpeed/5, LeanTweenType.linear);
+		isStill = false;
+	}
+
+	// Called afer a stop has occured (stoppoint met or other car collision)
+	void AccellerateStraight() 
+	{
+		moveStraight2 ((int)transform.rotation.eulerAngles.z, 1, straightSpeed, LeanTweenType.easeInQuad).setOnComplete(EndAccellerating);
+		isAccellerating=true;
+		isStill=false;
+	}
+
+	// This function moves a car in a certain time after a certain delay in a certain tweentype based on the rotation passed
+	// It is called for resuming car movement after a stop (stoppoint met or other car collision) or for tile switching while moving
+	// This function comutes straight movements only based on the input rotation
+	LTDescr moveStraight2(int rotation,float delay,float time,LeanTweenType tweenType)
+	{
+		LTDescr tweenMovement = null;
+		if (rotation == 0) {
+			tweenMovement = LeanTween.moveX (gameObject, transform.position.x + 1F, time).setEase (tweenType).setDelay (delay);
+			direction = Vector3.right;
+		} else  if (rotation == 180) {
+			tweenMovement = LeanTween.moveX (gameObject, transform.position.x - 1F, time).setEase (tweenType).setDelay (delay);
+			direction = Vector3.left;
+		} else if (rotation == 270) {
+			tweenMovement = LeanTween.moveY (gameObject, transform.position.y - 1, time).setEase (tweenType).setDelay (delay);
+			direction = Vector3.down;
+		} else if (rotation == 90) {
+			tweenMovement = LeanTween.moveY (gameObject, transform.position.y + 1F, time).setEase (tweenType).setDelay (delay);
+			direction = Vector3.up;
+		} else
+			Debug.Log ("rotazione anomala : " + rotation);
+		return tweenMovement;
+	}
+
+	// Called every time an accelleration has ended
+	void EndAccellerating()
+	{
+		isAccellerating = false;
+		continueMoving ((int)transform.rotation.eulerAngles.z);
 	}
 
 	// Called every time a steer has ended (on crossroad)
 	void EndSteering()
 	{
-		moveStraight ((int)transform.rotation.eulerAngles.z);
+		continueMoving ((int)transform.rotation.eulerAngles.z);
 		steering = false;
 	}
 
@@ -132,8 +187,8 @@ public class CarMovement : MonoBehaviour {
 				endLineCast=new Vector3(other.transform.position.x-1,transform.position.y);
 			RaycastHit2D hit = Physics2D.Linecast(other.transform.position,endLineCast, (1 << LayerMask.NameToLayer("cars")));
 			Debug.DrawLine(other.transform.position,endLineCast,Color.white);
-			if (hit.collider!=null)
-				Debug.Log("sto hittando"+hit.collider.gameObject.transform.tag);
+			//if (hit.collider!=null)
+				//Debug.Log("sto hittando"+hit.collider.gameObject.transform.tag);
 			// End check
 
 			steering=true;
@@ -165,11 +220,18 @@ public class CarMovement : MonoBehaviour {
 				middlePosition2 = new Vector3(other.transform.position.x,other.transform.position.y,transform.position.z);
 				endPosition = new Vector3(other.transform.position.x-1f,other.transform.position.y,transform.position.z);
 			}
-			LeanTween.move(gameObject, new Vector3 [] { currentPosition, middlePosition1,middlePosition2,endPosition}, 10.0F).setEase(LeanTweenType.linear).setOrientToPath2d(true).setOnComplete(EndSteering);
+			if (isAccellerating)
+			{
+				isAccellerating=false;
+				LeanTween.cancel(gameObject);
+			}
+			LeanTween.move(gameObject, new Vector3 [] { currentPosition, middlePosition1,middlePosition2,endPosition}, 5.0F).setEase(LeanTweenType.linear).setOrientToPath2d(true).setOnComplete(EndSteering);
 			return ;
 		}
         
-		moveStraight ((int)other.gameObject.transform.rotation.eulerAngles.z);
+		if (isAccellerating == true)
+			return;
+		continueMoving ((int)other.gameObject.transform.rotation.eulerAngles.z);
         transform.rotation = other.gameObject.transform.rotation;
     }
 
