@@ -2,7 +2,7 @@
 using UnityEditor;
 using System.Collections;
 
-[CustomEditor(typeof(Road))]
+[CustomEditor(typeof(TilesManager))]
 public class TileEditor : Editor {
 
 	private GameObject draggedObj;

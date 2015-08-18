@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 
@@ -19,7 +19,7 @@ public class BoardManager : MonoBehaviour {
     private Transform boardHolder;
 	private Transform crossroadList;
 	private Transform singleCrossroad;
-    private Transform spawners;
+//    private Transform spawners;
 
     void BoardSetup()
     {
@@ -27,7 +27,7 @@ public class BoardManager : MonoBehaviour {
 		crossroadList = new GameObject("CrossroadList").transform;
 		singleCrossroad = new GameObject("SingleCrossroad").transform;
 		singleCrossroad.transform.SetParent (crossroadList);
-        spawners = new GameObject("Spawners").transform;
+        //spawners = new GameObject("Spawners").transform;
 
         for (int x = 0; x < rows; x++)
         {
@@ -128,10 +128,7 @@ public class BoardManager : MonoBehaviour {
         }
     }
 
-	void OnGUI ()
-	{
-		GUI.Label (new Rect (50,50,100,50), "Score :");
-	}
+
 
     public void SetupScene(int level) 
     {

@@ -72,6 +72,7 @@
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\Loader.cs" />
      <Compile Include="Assets\Scripts\Road.cs" />
+     <Compile Include="Assets\Scripts\TilesManager.cs" />
      <Compile Include="Assets\Scripts\TrafficLightManager.cs" />
      <None Include="Assets\LeanTween\Examples\Shader\2dUnlitWithFade.shader" />
      <None Include="Assets\LeanTween\ReadMe.txt" />
