@@ -69,6 +69,12 @@ MonoBehaviour:
   cars:
   - {fileID: 110438, guid: 9fa36e89b7dd0cc45831beccbab4dd38, type: 2}
   - {fileID: 154148, guid: 671f90d7b29aad644be2cea5847ad90f, type: 2}
+  - {fileID: 146128, guid: 4e6cee1862efe7b4480c29961b4a4050, type: 2}
+  - {fileID: 170116, guid: 6ba6690ebe3b4084b813677a91770da9, type: 2}
+  - {fileID: 104668, guid: 8844a539ef7e4554fac452485e475245, type: 2}
+  - {fileID: 120052, guid: 3335e790bff25254cb2d57dcc58db9f1, type: 2}
+  - {fileID: 196226, guid: b367f53f4bffd7a4abea713551255f77, type: 2}
+  - {fileID: 176130, guid: cc92d39f5bda4bc43879aeb619b39f1a, type: 2}
   active: 1
 --- !u!212 &21227392
 SpriteRenderer:

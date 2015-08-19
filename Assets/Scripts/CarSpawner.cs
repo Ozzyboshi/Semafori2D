@@ -15,7 +15,7 @@ public class CarSpawner : MonoBehaviour {
 	void SpawnCar ()
     {
         if (active == false) return;
-        GameObject carInstance = Instantiate(cars[0], transform.position, Quaternion.identity) as GameObject;
+		GameObject carInstance = Instantiate(cars[Random.Range(0, cars.Length)], transform.position, Quaternion.identity) as GameObject;
         GameManager.instance.carInstances.Add(carInstance);
 	}
 }
