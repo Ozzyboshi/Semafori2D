@@ -212,7 +212,7 @@ public class CarMovement : MonoBehaviour {
 			{
 				middlePosition1 = new Vector3(other.transform.position.x,other.transform.position.y,transform.position.z);
 				middlePosition2 = new Vector3(other.transform.position.x,other.transform.position.y,transform.position.z);
-				endPosition = new Vector3(other.transform.position.x+1f,other.transform.position.y,transform.position.z);
+				endPosition = new Vector3(transform.position.x+1f,other.transform.position.y,transform.position.z);
 			}
 			else if (direction==Vector3.down)
 			{
