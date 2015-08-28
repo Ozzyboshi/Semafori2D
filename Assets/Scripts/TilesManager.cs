@@ -11,7 +11,6 @@ public class TilesManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
 		if (Application.isPlaying==false)
 		{
 			Vector3 newVector = new Vector3(transform.position.x,transform.position.y,0.0f);

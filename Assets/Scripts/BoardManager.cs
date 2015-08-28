@@ -19,6 +19,7 @@ public class BoardManager : MonoBehaviour {
     private Transform boardHolder;
 	private Transform crossroadList;
 	private Transform singleCrossroad;
+	private Transform carsList;
 //    private Transform spawners;
 
     void BoardSetup()
@@ -27,16 +28,17 @@ public class BoardManager : MonoBehaviour {
 		crossroadList = new GameObject("CrossroadList").transform;
 		singleCrossroad = new GameObject("SingleCrossroad").transform;
 		singleCrossroad.transform.SetParent (crossroadList);
+		carsList = new GameObject("CarsList").transform;
         //spawners = new GameObject("Spawners").transform;
 
         for (int x = 0; x < rows; x++)
         {
             for (int y = 0; y < columns; y++)
             {
-                GameObject toInstantiate = grass;
+                //GameObject toInstantiate = grass;
                 
-				if (x==7&&y==4) { instantiateCrossroad(x,y); continue;}
-				if ((x == 7 || x == 8) && (y == 3 || y == 4)) continue;
+				//if (x==7&&y==4) { instantiateCrossroad(x,y); continue;}
+				/*if ((x == 7 || x == 8) && (y == 3 || y == 4)) continue;
                 else if (y == 3 || y == 4) toInstantiate = road;
                 else if (x == 7 || x == 8) {
                     toInstantiate = road;
@@ -45,9 +47,9 @@ public class BoardManager : MonoBehaviour {
                     else instance2.transform.rotation *= Quaternion.Euler(0F, 0F, 270F);
                     instance2.transform.SetParent(boardHolder);
                     continue;
-                }
-                GameObject instance = Instantiate(toInstantiate, new Vector3(x,y,0F),Quaternion.identity) as GameObject;
-                if (y == 4) instance.transform.rotation *= Quaternion.Euler(0F, 0F, 180F);
+                }*/
+                GameObject instance = Instantiate(grass, new Vector3(x,y,0F),Quaternion.identity) as GameObject;
+                //if (y == 4) instance.transform.rotation *= Quaternion.Euler(0F, 0F, 180F);
                 instance.transform.SetParent(boardHolder);
             }
         }
@@ -81,6 +83,7 @@ public class BoardManager : MonoBehaviour {
 
     void InitializeStops()
     {
+		return;
 		bool changeTrafficLightState;
         GameObject[] roadGameObjects;
         GameObject[] crossroadGameObjects;
