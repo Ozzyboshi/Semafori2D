@@ -81,7 +81,7 @@ public class BoardManager : MonoBehaviour {
 		instance.transform.SetParent(crossroadPair);
 	}
 
-    void InitializeStops()
+    /*void InitializeStops()
     {
 		return;
 		bool changeTrafficLightState;
@@ -129,14 +129,14 @@ public class BoardManager : MonoBehaviour {
 				}
             }
         }
-    }
+    }*/
 
 
 
     public void SetupScene(int level) 
     {
         BoardSetup();
-        InitializeStops();
+        //InitializeStops();
     }
 
 }

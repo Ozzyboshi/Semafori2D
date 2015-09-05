@@ -6,7 +6,7 @@ public class CarMovement : MonoBehaviour {
     private float straightSpeed=3.5F;
     private bool braking = false;
 	private bool isStill = false;
-	private bool steering = false;
+	private bool isSteering = false;
 	private bool isAccellerating = false;
     public bool straightMovement;
 	private LTDescr tween;
@@ -25,7 +25,7 @@ public class CarMovement : MonoBehaviour {
     {
 		Vector2 startLineCast;
 
-        if (direction == Vector3.zero||steering==true) return;
+		if (direction == Vector3.zero||isSteering==true) return;
 		if (direction == Vector3.left || direction == Vector3.right)
         	startLineCast = transform.position + direction * (GetComponent<BoxCollider2D>().bounds.extents.x);
 		else
@@ -118,14 +118,27 @@ public class CarMovement : MonoBehaviour {
 	// Called for moving between tiles
 	void continueMoving(int rotation)
 	{
-		moveStraight2 (rotation, 0, straightSpeed/5, LeanTweenType.linear);
+		if (rotation >= 359 || rotation<=1)
+			rotation = 0;
+		else if (rotation >= 89 && rotation<=91)
+			rotation = 90;
+		else if (rotation >= 269 && rotation<=271)
+			rotation = 270;
+		else if (rotation >= 179 && rotation<=181)
+			rotation = 180;
+		if (rotation!=0 && rotation!=90 && rotation!=180 && rotation!=270) {
+			Debug.Log ("wrong rotation "+rotation);
+			return ;
+		}
+
+		moveStraight (rotation, 0, straightSpeed/5, LeanTweenType.linear);
 		isStill = false;
 	}
 
 	// Called afer a stop has occured (stoppoint met or other car collision)
 	void AccellerateStraight() 
 	{
-		moveStraight2 ((int)transform.rotation.eulerAngles.z, 1, straightSpeed, LeanTweenType.easeInQuad).setOnComplete(EndAccellerating);
+		moveStraight ((int)transform.rotation.eulerAngles.z, 1, straightSpeed, LeanTweenType.easeInQuad).setOnComplete(EndAccellerating);
 		isAccellerating=true;
 		isStill=false;
 	}
@@ -133,8 +146,10 @@ public class CarMovement : MonoBehaviour {
 	// This function moves a car in a certain time after a certain delay in a certain tweentype based on the rotation passed
 	// It is called for resuming car movement after a stop (stoppoint met or other car collision) or for tile switching while moving
 	// This function comutes straight movements only based on the input rotation
-	LTDescr moveStraight2(int rotation,float delay,float time,LeanTweenType tweenType)
+	LTDescr moveStraight(int rotation,float delay,float time,LeanTweenType tweenType)
 	{
+		if (isSteering == true)
+			return null;
 		LTDescr tweenMovement = null;
 		if (rotation == 0) {
 			tweenMovement = LeanTween.moveX (gameObject, transform.position.x + 1F, time).setEase (tweenType).setDelay (delay);
@@ -163,14 +178,15 @@ public class CarMovement : MonoBehaviour {
 	// Called every time a steer has ended (on crossroad)
 	void EndSteering()
 	{
+		isSteering = false;
 		continueMoving ((int)transform.rotation.eulerAngles.z);
-		steering = false;
+
 	}
 
 	// Called every time car changes road tile
     void OnTriggerEnter2D(Collider2D other)
     {
-		if (braking == true||steering==true) return;
+		if (braking == true||isSteering==true) return;
 
 		// If the car hits a crossroad it drifts
 		if (other.tag=="crossroad")
@@ -191,7 +207,7 @@ public class CarMovement : MonoBehaviour {
 				//Debug.Log("sto hittando"+hit.collider.gameObject.transform.tag);
 			// End check
 
-			steering=true;
+
 			Vector3 currentPosition = transform.position;
 			Vector3 middlePosition1;
 			Vector3 middlePosition2;
@@ -225,6 +241,7 @@ public class CarMovement : MonoBehaviour {
 				isAccellerating=false;
 				LeanTween.cancel(gameObject);
 			}
+			isSteering=true;
 			LeanTween.move(gameObject, new Vector3 [] { currentPosition, middlePosition1,middlePosition2,endPosition}, 5.0F).setEase(LeanTweenType.linear).setOrientToPath2d(true).setOnComplete(EndSteering);
 			return ;
 		}
