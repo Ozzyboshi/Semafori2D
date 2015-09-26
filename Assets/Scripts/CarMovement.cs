@@ -138,6 +138,8 @@ public class CarMovement : MonoBehaviour {
 	// Called afer a stop has occured (stoppoint met or other car collision)
 	void AccellerateStraight() 
 	{
+		if (isSteering == true)
+			return ;
 		moveStraight ((int)transform.rotation.eulerAngles.z, 1, straightSpeed, LeanTweenType.easeInQuad).setOnComplete(EndAccellerating);
 		isAccellerating=true;
 		isStill=false;
@@ -191,6 +193,7 @@ public class CarMovement : MonoBehaviour {
 		// If the car hits a crossroad it drifts
 		if (other.tag=="crossroad")
 		{
+			isSteering=true;
 			// Check if the other side of the road is available - to be finished
 			Vector2 endLineCast=new Vector2(0,0);
 			if (direction == Vector3.right)
@@ -201,14 +204,22 @@ public class CarMovement : MonoBehaviour {
 				endLineCast=new Vector3(other.transform.position.x+1,transform.position.y);
 			else if (direction == Vector3.down)
 				endLineCast=new Vector3(other.transform.position.x-1,transform.position.y);
+
+
 			RaycastHit2D hit = Physics2D.Linecast(other.transform.position,endLineCast, (1 << LayerMask.NameToLayer("cars")));
-			Debug.DrawLine(other.transform.position,endLineCast,Color.white);
-			//if (hit.collider!=null)
-				//Debug.Log("sto hittando"+hit.collider.gameObject.transform.tag);
-			// End check
+			Debug.DrawLine(other.transform.position,endLineCast,Color.red);
+			if (hit.collider!=null)
+			{
+				LeanTween.cancel(gameObject);
+				isSteering=true;
+				StartCoroutine(WaitForCrossroadToBeReady(1,other.transform.position,endLineCast,other));
+				return ;
+				//	Debug.Log("sto hittando"+hit.collider.gameObject.transform.tag);
+			//		return ;
+			}
+			Steer(other);
 
-
-			Vector3 currentPosition = transform.position;
+			/*Vector3 currentPosition = transform.position;
 			Vector3 middlePosition1;
 			Vector3 middlePosition2;
 			Vector3 endPosition;
@@ -243,6 +254,7 @@ public class CarMovement : MonoBehaviour {
 			}
 			isSteering=true;
 			LeanTween.move(gameObject, new Vector3 [] { currentPosition, middlePosition1,middlePosition2,endPosition}, 5.0F).setEase(LeanTweenType.linear).setOrientToPath2d(true).setOnComplete(EndSteering);
+			*/
 			return ;
 		}
         
@@ -251,5 +263,66 @@ public class CarMovement : MonoBehaviour {
 		continueMoving ((int)other.gameObject.transform.rotation.eulerAngles.z);
         transform.rotation = other.gameObject.transform.rotation;
     }
+
+	IEnumerator WaitForCrossroadToBeReady(float duration,Vector2 start,Vector2 end,Collider2D other)
+	{
+		RaycastHit2D hit = Physics2D.Linecast(start,end, (1 << LayerMask.NameToLayer("cars")));
+		Debug.DrawLine(start,end,Color.red);
+		//Debug.Log ("valuto");
+		while (hit) {
+			//Time.timeScale = 0.0F;
+			CarMovement otherCar = hit.collider.gameObject.GetComponent<CarMovement>();
+			//Debug.Log("sto hittandoooooooooooooooo"+hit.collider.gameObject.transform.tag+otherCar.isSteering);
+			//Debug.Log(hit.collider.gameObject.GetInstanceID()+"--"+gameObject.GetInstanceID());
+			yield return new WaitForSeconds(duration);   //Wait
+			hit = Physics2D.Linecast(start,end, (1 << LayerMask.NameToLayer("cars")));
+			Debug.DrawLine(start,end,Color.red);
+		}
+		//Debug.Log("Ora partirei: "+Time.time);
+		//Time.timeScale = 0.0F;
+		Steer (other);
+	}
+
+	void Steer(Collider2D other) 
+	{
+		Vector3 currentPosition = transform.position;
+		Vector3 middlePosition1;
+		Vector3 middlePosition2;
+		Vector3 endPosition;
+		if (direction==Vector3.right)
+		{
+			middlePosition1 = new Vector3(other.transform.position.x,transform.position.y,transform.position.z);
+			middlePosition2 = new Vector3(other.transform.position.x,transform.position.y,transform.position.z);
+			endPosition = new Vector3(other.transform.position.x,transform.position.y-1,transform.position.z);
+		}
+		else if (direction==Vector3.left)
+		{
+			middlePosition1 = new Vector3(other.transform.position.x,transform.position.y,transform.position.z);
+			middlePosition2 = new Vector3(other.transform.position.x,transform.position.y,transform.position.z);
+			endPosition = new Vector3(other.transform.position.x,transform.position.y+1,transform.position.z);
+		}
+		else if (direction==Vector3.up)
+		{
+			middlePosition1 = new Vector3(other.transform.position.x,other.transform.position.y,transform.position.z);
+			middlePosition2 = new Vector3(other.transform.position.x,other.transform.position.y,transform.position.z);
+			endPosition = new Vector3(transform.position.x+1f,other.transform.position.y,transform.position.z);
+		}
+		else if (direction==Vector3.down)
+		{
+			middlePosition1 = new Vector3(other.transform.position.x,other.transform.position.y,transform.position.z);
+			middlePosition2 = new Vector3(other.transform.position.x,other.transform.position.y,transform.position.z);
+			endPosition = new Vector3(other.transform.position.x-1f,other.transform.position.y,transform.position.z);
+		}
+		if (isAccellerating)
+		{
+			isAccellerating=false;
+			LeanTween.cancel(gameObject);
+		}
+		isSteering=true;
+		//Debug.Log ("si parte");
+		LeanTween.move(gameObject, new Vector3 [] { currentPosition, middlePosition1,middlePosition2,endPosition}, 5.0F).setEase(LeanTweenType.linear).setOrientToPath2d(true).setOnComplete(EndSteering);
+
+		return ;
+	}
 
 }
