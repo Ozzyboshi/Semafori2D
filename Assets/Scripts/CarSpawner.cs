@@ -16,7 +16,8 @@ public class CarSpawner : MonoBehaviour {
     {
         if (active == false) return;
 		GameObject carInstance = Instantiate(cars[Random.Range(0, cars.Length)], transform.position, Quaternion.identity) as GameObject;
-        GameManager.instance.carInstances.Add(carInstance);
+		carInstance.GetComponent<CarMovement> ().showCarCrossroadStraightLine = true;
+		GameManager.instance.carInstances.Add(carInstance);
 		carInstance.transform.SetParent (GameObject.Find ("CarsList").transform);
 	}
 }

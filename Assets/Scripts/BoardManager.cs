@@ -64,7 +64,7 @@ public class BoardManager : MonoBehaviour {
 	}
 
 	//This function builds a crossroad with 4 tiles and wraps them up into a crossroadpair gameobject
-	void instantiateCrossroad(int x,int y) 
+	/*void instantiateCrossroad(int x,int y) 
 	{
 		Transform crossroadPair = new GameObject("CrossroadPair").transform;
 		crossroadPair.SetParent (singleCrossroad);
@@ -79,7 +79,7 @@ public class BoardManager : MonoBehaviour {
 		instance.transform.SetParent(crossroadPair);
 		instance = Instantiate(crossroad, new Vector3(x+1,y,0F),Quaternion.identity) as GameObject;
 		instance.transform.SetParent(crossroadPair);
-	}
+	}*/
 
     /*void InitializeStops()
     {
