@@ -5,14 +5,19 @@ public class CarMovement : MonoBehaviour {
     private Vector3 direction;
     private float straightSpeed=3.5F;
     private bool braking = false;
-	private bool isStill = false;
-	private bool isSteering = false;
+
 	private bool isAccellerating = false;
-	private bool isTraversingCrossroad = false;
-    public bool straightMovement;
+    private bool straightMovement;
 	public bool showCarCollisionLine = false;
 	public bool showCarCrossroadStraightLine = false;
 	private LTDescr tween;
+
+	[SerializeField]
+	private bool isTraversingCrossroad = false;
+	[SerializeField]
+	private bool isSteering = false;
+	[SerializeField]
+	private bool isStill = false;
 
     public void StartStraightMovement()
     {
@@ -56,22 +61,12 @@ public class CarMovement : MonoBehaviour {
             }
             if (hit.distance < 0.2F) {
 				StopMovement();
-
-				//LeanTween.pause(gameObject);
-                //Debug.Log("2Distanza" + hit.distance+"hitpointposition"+hit.point.x);
-                //LeanTween.cancel(gameObject);
-                //Time.timeScale = 0.0F;
             }
 			else
 			{
 				if (isStill==true)
 					AccellerateStraight();
 			}
-
-            //Time.timeScale = 0.0F;
-           
-            //float heightError = floatHeight - distance;
-            //float force = liftForce * heightError - rigidbody2D.velocity.y * damping;
         }
 		else
 		{
@@ -82,6 +77,8 @@ public class CarMovement : MonoBehaviour {
 	// Called to stop car movement
 	void StopMovement()
 	{
+		if (isTraversingCrossroad == true)
+			return;
 		isStill=true;
 		LeanTween.cancel(gameObject);
 	}
@@ -89,6 +86,9 @@ public class CarMovement : MonoBehaviour {
 	// Called for moving between tiles
 	void continueMoving(int rotation,int squares)
 	{
+		if (isTraversingCrossroad == true)
+			return;
+
 		if (rotation >= 359 || rotation<=1)
 			rotation = 0;
 		else if (rotation >= 89 && rotation<=91)
@@ -109,6 +109,9 @@ public class CarMovement : MonoBehaviour {
 	// Called afer a stop has occured (stoppoint met or other car collision)
 	void AccellerateStraight() 
 	{
+		if (isTraversingCrossroad == true)
+			return;
+
 		if (isSteering == true)
 			return ;
 		moveStraight ((int)transform.rotation.eulerAngles.z, 1, straightSpeed, LeanTweenType.easeInQuad,1).setOnComplete(EndAccellerating);
@@ -121,6 +124,8 @@ public class CarMovement : MonoBehaviour {
 	// This function comutes straight movements only based on the input rotation
 	LTDescr moveStraight(int rotation,float delay,float time,LeanTweenType tweenType,int squares)
 	{
+		if (isTraversingCrossroad == true)
+			return null;
 		if (isSteering == true)
 			return null;
 		LTDescr tweenMovement = null;
@@ -164,9 +169,10 @@ public class CarMovement : MonoBehaviour {
     {
 		if (braking == true||isSteering==true||isTraversingCrossroad==true) return;
 
-		// If the car hits a crossroad it drifts
+		// If the car hits a crossroad
 		if (other.tag=="crossroad")
 		{
+			// 0 means go straight, 1 means steer
 			int directionChoice = Random.Range(0, 2);
 			//directionChoice=1;
 			if (directionChoice==0)
@@ -175,35 +181,11 @@ public class CarMovement : MonoBehaviour {
 				GoOtherSideSCrossroadWhenAvailable(other);
 				return ;
 			}
-
-			// turn right
-			isSteering=true;
-			// Check if the other side of the road is available - to be finished
-			Vector2 endLineCast=new Vector2(0,0);
-			if (direction == Vector3.right)
-				endLineCast=new Vector3(other.transform.position.x,transform.position.y-1);
-			else if (direction == Vector3.left)
-				endLineCast=new Vector3(other.transform.position.x,transform.position.y+1);
-			else if (direction == Vector3.up)
-				endLineCast=new Vector3(other.transform.position.x+1.5F,other.transform.position.y);
-			else if (direction == Vector3.down)
-				endLineCast=new Vector3(other.transform.position.x-1.5F,other.transform.position.y);
-
-
-			RaycastHit2D hit = Physics2D.Linecast(other.transform.position,endLineCast, (1 << LayerMask.NameToLayer("cars")));
-			Debug.DrawLine(other.transform.position,endLineCast,Color.red);
-			//Pause();
-			if (hit.collider!=null)
-			{
-				LeanTween.cancel(gameObject);
-				isSteering=true;
-				StartCoroutine(WaitForCrossroadToBeReady(1,other.transform.position,endLineCast,other));
-				return ;
-				//	Debug.Log("sto hittando"+hit.collider.gameObject.transform.tag);
-			//		return ;
+			else {
+				// Steer
+				SteerSideSCrossroadWhenAvailable(other);
+				return;
 			}
-			Steer(other);
-			return ;
 		}
         
 		if (isAccellerating == true)
@@ -216,18 +198,13 @@ public class CarMovement : MonoBehaviour {
 	{
 		RaycastHit2D hit = Physics2D.Linecast(start,end, (1 << LayerMask.NameToLayer("cars")));
 		Debug.DrawLine(start,end,Color.red);
-		//Debug.Log ("valuto");
 		while (hit) {
-			//Time.timeScale = 0.0F;
 			CarMovement otherCar = hit.collider.gameObject.GetComponent<CarMovement>();
-			//Debug.Log("sto hittandoooooooooooooooo"+hit.collider.gameObject.transform.tag+otherCar.isSteering);
-			//Debug.Log(hit.collider.gameObject.GetInstanceID()+"--"+gameObject.GetInstanceID());
 			yield return new WaitForSeconds(duration);   //Wait
 			hit = Physics2D.Linecast(start,end, (1 << LayerMask.NameToLayer("cars")));
 			Debug.DrawLine(start,end,Color.red);
 		}
-		//Debug.Log("Ora partirei: "+Time.time);
-		//Time.timeScale = 0.0F;
+		isTraversingCrossroad = true;
 		Steer (other);
 	}
 
@@ -267,12 +244,42 @@ public class CarMovement : MonoBehaviour {
 			LeanTween.cancel(gameObject);
 		}
 		isSteering=true;
-		//Debug.Log ("si parte");
 		LeanTween.move(gameObject, new Vector3 [] { currentPosition, middlePosition1,middlePosition2,endPosition}, 5.0F).setEase(LeanTweenType.linear).setOrientToPath2d(true).setOnComplete(EndCrossroadMovement);
 
 		return ;
 	}
+
+	void SteerSideSCrossroadWhenAvailable(Collider2D other) {
+		Vector2 endLineCast=new Vector2(0,0);
+		if (direction == Vector3.right)
+			endLineCast=new Vector3(other.transform.position.x,transform.position.y-1.5F);
+		else if (direction == Vector3.left)
+			endLineCast=new Vector3(other.transform.position.x,transform.position.y+1.5F);
+		else if (direction == Vector3.up)
+			endLineCast=new Vector3(other.transform.position.x+1.5F,other.transform.position.y);
+		else if (direction == Vector3.down)
+			endLineCast=new Vector3(other.transform.position.x-1.5F,other.transform.position.y);
+		
+		
+		RaycastHit2D hit = Physics2D.Linecast(other.transform.position,endLineCast, (1 << LayerMask.NameToLayer("cars")));
+		Debug.DrawLine(other.transform.position,endLineCast,Color.red);
+		//Pause();
+		if (hit.collider!=null)
+		{
+			LeanTween.cancel(gameObject);
+			isSteering=true;
+			StartCoroutine(WaitForCrossroadToBeReady(1,other.transform.position,endLineCast,other));
+			return ;
+		}
+		isTraversingCrossroad = true;
+		Steer(other);
+		return ;
+	}
+
 	void GoOtherSideSCrossroadWhenAvailable(Collider2D other) {
+
+		if (isTraversingCrossroad == true)
+			return;
 		Vector2 endLineCast=new Vector2(0,0);
 		if (direction == Vector3.right)
 			endLineCast=new Vector3(other.transform.position.x+3,transform.position.y);
@@ -285,26 +292,18 @@ public class CarMovement : MonoBehaviour {
 
 		RaycastHit2D hit = Physics2D.Linecast(other.transform.position,endLineCast, (1 << LayerMask.NameToLayer("cars")));
 		if (showCarCrossroadStraightLine) Debug.DrawLine(other.transform.position,endLineCast,Color.green);
-
-
 		if (hit.collider!=null)
 		{
-			Debug.Log ("sto collidendo connnnn "+hit.collider.gameObject.tag);
+			//Debug.Log ("sto collidendo connnnn "+hit.collider.gameObject.tag);
 			//Time.timeScale = 0.0F;
 
 			LeanTween.cancel(gameObject);
 			StartCoroutine(WaitForCrossroadToBeReady2(1,other.transform.position,endLineCast,other));
 			return ;
-			//LeanTween.cancel(gameObject);
-			//StartCoroutine(WaitForCrossroadToBeReady(1,other.transform.position,endLineCast,other));
-			//return ;
-			//	Debug.Log("sto hittando"+hit.collider.gameObject.transform.tag);
-			//		return ;
 		}
-		Debug.Log ("muoviti");
-		isTraversingCrossroad = true;
-		//continueMoving ((int)other.gameObject.transform.rotation.eulerAngles.z,2);
+
 		moveStraight ((int)other.gameObject.transform.rotation.eulerAngles.z, 0, straightSpeed/5*3, LeanTweenType.linear,3).setOnComplete(EndCrossroadMovement);
+		isTraversingCrossroad = true;
 		isStill = false;
 	}
 
@@ -322,10 +321,10 @@ public class CarMovement : MonoBehaviour {
 			hit = Physics2D.Linecast(start,end, (1 << LayerMask.NameToLayer("cars")));
 			Debug.DrawLine(start,end,Color.red);
 		}
-		Debug.Log ("muoviti2");
-		isTraversingCrossroad = true;
+
 		//continueMoving ((int)other.gameObject.transform.rotation.eulerAngles.z,2);
 		moveStraight ((int)other.gameObject.transform.rotation.eulerAngles.z, 0, straightSpeed/5*3, LeanTweenType.linear,3).setOnComplete(EndCrossroadMovement);
+		isTraversingCrossroad = true;
 		isStill = false;
 	}
 
