@@ -4,9 +4,9 @@ using System.Collections;
 public class CarMovement : MonoBehaviour {
     private Vector3 direction;
     private float straightSpeed=3.5F;
-    private bool braking = false;
+    
 
-	private bool isAccellerating = false;
+
     private bool straightMovement;
 	public bool showCarCollisionLine = false;
 	public bool showCarCrossroadStraightLine = false;
@@ -18,6 +18,10 @@ public class CarMovement : MonoBehaviour {
 	private bool isSteering = false;
 	[SerializeField]
 	private bool isStill = false;
+	[SerializeField]
+	private bool isBraking = false;
+	[SerializeField]
+	private bool isAccellerating = false;
 
     public void StartStraightMovement()
     {
@@ -53,7 +57,7 @@ public class CarMovement : MonoBehaviour {
 				distance = Mathf.Abs(hit.point.y - transform.position.y);
 			//distance = hit.distance;
 			//Debug.Log(hit.distance+":"+distance);
-            if (hit.distance < 1.5F && braking==false) {
+			if (hit.distance < 1.5F && isBraking==false) {
                 //Debug.Log("1Distanza" + hit.distance + "hitpointposition" + hit.point.x);
 				//LeanTween.moveX(gameObject, hit.point.x, 10F).setEase(LeanTweenType.linear).setDelay(0f);
 				//tween.setTime(10.5f);
@@ -167,7 +171,7 @@ public class CarMovement : MonoBehaviour {
 	// Called every time car changes road tile
     void OnTriggerEnter2D(Collider2D other)
     {
-		if (braking == true||isSteering==true||isTraversingCrossroad==true) return;
+		if (isSteering==true||isTraversingCrossroad==true) return;
 
 		// If the car hits a crossroad
 		if (other.tag=="crossroad")
@@ -188,8 +192,6 @@ public class CarMovement : MonoBehaviour {
 			}
 		}
         
-		if (isAccellerating == true)
-			return;
 		continueMoving ((int)other.gameObject.transform.rotation.eulerAngles.z,1);
         transform.rotation = other.gameObject.transform.rotation;
     }
