@@ -24,10 +24,10 @@ TagManager:
   - crossroad
   - background
   - stop
-  - 
-  - 
-  - 
-  - 
+  - stopright
+  - stopleft
+  - stopup
+  - stopdown
   - 
   - 
   - 
